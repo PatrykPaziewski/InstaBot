@@ -1,29 +1,39 @@
 import time
-from threading import Thread 
+import os
 
 from additionalThread import CountdownTask
 
 class main():
     def __init__(self, *args, **kwargs):
-        self.c = CountdownTask() 
-        self.t = Thread(target = self.c.run) 
+        self.started = False
+        self.c = CountdownTask()
         self.main_loop()
 
     def start(self):
-        self.t.start() 
+        if not self.started:
+            self.c.run() 
+            self.clear()
+            self.started = True
 
     def stop(self):
-        self.c.terminate()
+        if self.started:
+            self.c.terminate()
+            self.clear()
+            self.started = False
+            
+    def clear(self):
+        os.system("cls")
                 
     def main_loop(self):
-        text = input()
-        while text != "stop":
+        text = None
+        while text != "exit":
             if  text == "start":
                 self.start()
+                
+            if  text == "stop":
+                self.stop()
             text = input()
-            
-        if  text == "stop":
-            self.stop()
+                
 
 
 
